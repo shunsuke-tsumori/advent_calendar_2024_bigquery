@@ -1,0 +1,1 @@
+# advent_calendar_2024_bigquery
