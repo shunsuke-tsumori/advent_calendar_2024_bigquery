@@ -37,13 +37,21 @@ resource "google_project" "this" {
 ##########################################
 # Services
 ##########################################
-# locals {
-#   services = toset([
-#   ])
-# }
-#
-# resource "google_project_service" "service" {
-#   for_each           = local.services
-#   service            = each.value
-#   disable_on_destroy = false
-# }
+locals {
+  services = toset([
+    "datacatalog.googleapis.com"
+  ])
+}
+
+resource "google_project_service" "service" {
+  for_each           = local.services
+  service            = each.value
+  disable_on_destroy = false
+}
+
+##########################################
+# Modules
+##########################################
+module "udfs" {
+  source = "../modules/udfs"
+}
