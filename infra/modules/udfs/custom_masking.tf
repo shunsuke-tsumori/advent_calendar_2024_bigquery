@@ -10,7 +10,7 @@ resource "google_bigquery_routine" "custom_masking" {
   data_governance_type = "DATA_MASKING"
 
   arguments {
-    name = "ssn"
+    name      = "ssn"
     data_type = jsonencode({ "typeKind" : "STRING" })
   }
 
@@ -23,9 +23,9 @@ resource "google_bigquery_routine" "custom_masking" {
 # Limitations
 ##########################################
 resource "google_data_catalog_taxonomy" "taxonomy" {
-  region       = local.region
-  display_name = "the_taxonomy"
-  description  = "the_taxonomy"
+  region                 = local.region
+  display_name           = "the_taxonomy"
+  description            = "the_taxonomy"
   activated_policy_types = ["FINE_GRAINED_ACCESS_CONTROL"]
 }
 
