@@ -1,3 +1,6 @@
+##########################################
+# Routines
+##########################################
 resource "google_bigquery_routine" "custom_masking" {
   dataset_id = google_bigquery_dataset.my_dataset.dataset_id
   routine_id = "custom_masking_fn"
@@ -16,6 +19,9 @@ resource "google_bigquery_routine" "custom_masking" {
   definition_body = "SAFE.REGEXP_REPLACE(ssn, '[0-9]', 'X')"
 }
 
+##########################################
+# Limitations
+##########################################
 resource "google_data_catalog_taxonomy" "taxonomy" {
   region       = local.region
   display_name = "the_taxonomy"
@@ -37,4 +43,20 @@ resource "google_bigquery_datapolicy_data_policy" "data_policy" {
   data_masking_policy {
     routine = google_bigquery_routine.custom_masking.id
   }
+}
+
+##########################################
+# IAM
+##########################################
+resource "google_data_catalog_policy_tag_iam_binding" "viewers" {
+  policy_tag = google_data_catalog_policy_tag.policy_tag.name
+  role       = "roles/datacatalog.categoryFineGrainedReader"
+  members    = var.the_data_viewers
+}
+
+resource "google_bigquery_datapolicy_data_policy_iam_binding" "parent_tag_masked_readers" {
+  location       = local.region
+  data_policy_id = google_bigquery_datapolicy_data_policy.data_policy.id
+  role           = "roles/bigquerydatapolicy.maskedReader"
+  members        = var.the_data_viewers
 }

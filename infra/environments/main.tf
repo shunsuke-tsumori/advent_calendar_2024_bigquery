@@ -54,4 +54,6 @@ resource "google_project_service" "service" {
 ##########################################
 module "udfs" {
   source = "../modules/udfs"
+
+  the_data_viewers = var.the_data_viewers
 }
